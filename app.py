@@ -4,7 +4,14 @@ from datetime import datetime, timezone
 import streamlit as st
 import pandas as pd
 
-from src.charts import cme_speed_chart, daily_counts, flare_timeline, kp_chart
+from src.charts import (
+    cme_speed_chart,
+    daily_counts,
+    earth_globe,
+    flare_timeline,
+    kp_chart,
+    sun_disc,
+)
 from src.data import get_api_key, get_space_weather
 from src.risk import assess_risk
 
@@ -272,11 +279,19 @@ def main() -> None:
             )
 
     with tab2:
-        st.plotly_chart(
-            flare_timeline(flares),
-            use_container_width=True,
-            key="tab_flare_timeline",
-        )
+        col_f1, col_f2 = st.columns([1.15, 0.85])
+        with col_f1:
+            st.plotly_chart(
+                flare_timeline(flares),
+                use_container_width=True,
+                key="tab_flare_timeline",
+            )
+        with col_f2:
+            st.plotly_chart(
+                sun_disc(flares),
+                use_container_width=True,
+                key="tab_sun_disc",
+            )
         with st.expander("📄 View Solar Flares Raw Data"):
             if not flares.empty:
                 st.dataframe(flares, use_container_width=True)
@@ -296,11 +311,20 @@ def main() -> None:
                 st.info("No CME records in selected range.")
 
     with tab4:
-        st.plotly_chart(
-            kp_chart(storms),
-            use_container_width=True,
-            key="tab_kp_chart",
-        )
+        col_s1, col_s2 = st.columns([1.1, 0.9])
+        with col_s1:
+            st.plotly_chart(
+                kp_chart(storms),
+                use_container_width=True,
+                key="tab_kp_chart",
+            )
+        with col_s2:
+            max_kp_recorded = storms["max_kp"].max() if (not storms.empty and "max_kp" in storms.columns) else None
+            st.plotly_chart(
+                earth_globe(max_kp_recorded),
+                use_container_width=True,
+                key="tab_earth_globe",
+            )
         with st.expander("📄 View Geomagnetic Storms Raw Data"):
             if not storms.empty:
                 st.dataframe(storms, use_container_width=True)
