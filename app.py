@@ -252,15 +252,31 @@ def main() -> None:
     ])
 
     with tab1:
-        st.plotly_chart(daily_counts(flares, cmes, storms), use_container_width=True)
+        st.plotly_chart(
+            daily_counts(flares, cmes, storms),
+            use_container_width=True,
+            key="overview_daily_counts",
+        )
         col_a, col_b = st.columns(2)
         with col_a:
-            st.plotly_chart(flare_timeline(flares), use_container_width=True)
+            st.plotly_chart(
+                flare_timeline(flares),
+                use_container_width=True,
+                key="overview_flare_timeline",
+            )
         with col_b:
-            st.plotly_chart(cme_speed_chart(cmes), use_container_width=True)
+            st.plotly_chart(
+                cme_speed_chart(cmes),
+                use_container_width=True,
+                key="overview_cme_speed",
+            )
 
     with tab2:
-        st.plotly_chart(flare_timeline(flares), use_container_width=True)
+        st.plotly_chart(
+            flare_timeline(flares),
+            use_container_width=True,
+            key="tab_flare_timeline",
+        )
         with st.expander("📄 View Solar Flares Raw Data"):
             if not flares.empty:
                 st.dataframe(flares, use_container_width=True)
@@ -268,7 +284,11 @@ def main() -> None:
                 st.info("No solar flare records in selected range.")
 
     with tab3:
-        st.plotly_chart(cme_speed_chart(cmes), use_container_width=True)
+        st.plotly_chart(
+            cme_speed_chart(cmes),
+            use_container_width=True,
+            key="tab_cme_speed",
+        )
         with st.expander("📄 View CME Raw Data"):
             if not cmes.empty:
                 st.dataframe(cmes, use_container_width=True)
@@ -276,7 +296,11 @@ def main() -> None:
                 st.info("No CME records in selected range.")
 
     with tab4:
-        st.plotly_chart(kp_chart(storms), use_container_width=True)
+        st.plotly_chart(
+            kp_chart(storms),
+            use_container_width=True,
+            key="tab_kp_chart",
+        )
         with st.expander("📄 View Geomagnetic Storms Raw Data"):
             if not storms.empty:
                 st.dataframe(storms, use_container_width=True)
