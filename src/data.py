@@ -4,9 +4,13 @@ from datetime import datetime, timedelta, timezone
 import os
 from typing import Any
 
+from dotenv import load_dotenv
 import numpy as np
 import pandas as pd
 import requests
+
+# Load environment variables from .env file in project root
+load_dotenv()
 
 FLARE_CLASS_MAP = {"A": 1, "B": 2, "C": 3, "M": 4, "X": 5}
 
@@ -15,7 +19,8 @@ def get_api_key(api_key: str | None = None) -> str:
     """Retrieve NASA API key from argument, environment, or default to DEMO_KEY."""
     if api_key:
         return api_key
-    return os.getenv("NASA_API_KEY", "DEMO_KEY")
+    env_key = os.getenv("NASA_API_KEY")
+    return env_key.strip() if env_key and env_key.strip() else "DEMO_KEY"
 
 
 def fetch_donki_data(
